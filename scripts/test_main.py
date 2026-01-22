@@ -539,7 +539,10 @@ for model_path_CDDPM in model_path_CDDPMs:
                 # img = img.resize((512, 512), Image.ANTIALIAS)
                 img.save(os.path.join(output_dir_test, f"test_pred_{test_count}.png"))
 
-        '''calculate FID, KID. '''
+        '''calculate FID, KID. 
+        This value is not the value reported in the paper; 
+        please refer to the README section for details on how the metrics are calculated.
+        The same applies to other testing scripts.'''
         current_Fid = fid(gt_dir_test, output_dir_test, fid_batch_size=128, fid_device=device)
         current_Kid = kid(gt_dir_test, output_dir_test, kid_batch_size=128, kid_device=device)
         print(model_path_CDDPM, 'FID: ', current_Fid, 'KID: ', current_Kid)
