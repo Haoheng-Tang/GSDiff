@@ -81,6 +81,8 @@ boundary-autoencoder CNN params: https://drive.google.com/file/d/1l6QRpfX5Jtucg3
 
 topology-autoencoder Transformer params: https://drive.google.com/file/d/1tExX8LdrFpJfBQH5y2emC6BltBwf9tHx/view?usp=sharing
 
+unconstrained sloping walls params: https://drive.google.com/file/d/1aQNaQwHPkdlNyMQoazZDye7_O8Qbqvzq/view?usp=drive_link
+
 --------------------------LIFULL---------------------------------------
 
 Training parameters on the LIFULL dataset: 
