@@ -853,10 +853,17 @@ structure_graphs = np.load('./rplandata/Data/structure_graphs.npy', allow_pickle
 image_path = r'rplandata/Data/floorplan_dataset'
 # print(len(os.listdir(image_path)))
 
-os.mkdir('./rplandata/Data/rplang-v3-withsemantics')
-os.mkdir('./rplandata/Data/rplang-v3-withsemantics/train')
-os.mkdir('./rplandata/Data/rplang-v3-withsemantics/val')
-os.mkdir('./rplandata/Data/rplang-v3-withsemantics/test')
+# os.mkdir('./rplandata/Data/rplang-v3-withsemantics')
+# os.mkdir('./rplandata/Data/rplang-v3-withsemantics/train')
+# os.mkdir('./rplandata/Data/rplang-v3-withsemantics/val')
+# os.mkdir('./rplandata/Data/rplang-v3-withsemantics/test')
+
+# HT: Avoid FileExistsError when the directory already exists
+os.makedirs('./rplandata/Data/rplang-v3-withsemantics', exist_ok=True)
+os.makedirs('./rplandata/Data/rplang-v3-withsemantics/train', exist_ok=True)
+os.makedirs('./rplandata/Data/rplang-v3-withsemantics/val', exist_ok=True)
+os.makedirs('./rplandata/Data/rplang-v3-withsemantics/test', exist_ok=True)
+
 
 from tiny_graph import train as tr
 from tiny_graph import val as va

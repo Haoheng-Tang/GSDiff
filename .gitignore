@@ -1,0 +1,6 @@
+/datasets/
+/outputs/
+/ckpts/
+/test_outputs/
+**/pycache/
+**/__pycache__/

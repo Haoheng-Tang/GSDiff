@@ -1,11 +1,13 @@
 import sys
+from pathlib import Path
 
 import numpy as np
 
-sys.path.append('/home/user00/HSZ/gsdiff-main')
-sys.path.append('/home/user00/HSZ/gsdiff-main/datasets')
-sys.path.append('/home/user00/HSZ/gsdiff-main/gsdiff')
-sys.path.append('/home/user00/HSZ/gsdiff-main/scripts/metrics')
+DATASETS_DIR = Path(__file__).resolve().parent
+REPO_ROOT = DATASETS_DIR.parent
+
+sys.path.insert(0, str(REPO_ROOT))
+sys.path.insert(0, str(DATASETS_DIR))
 
 
 import math
@@ -14,11 +16,12 @@ import shutil
 from torch.optim import AdamW, SGD
 from torch.utils.data import DataLoader
 from itertools import cycle
-from datasets.rplang_edge_semantics_simplified import RPlanGEdgeSemanSimplified
+# RPlanGEdgeSemanSimplified is not used in this preprocessing script.
+
 from gsdiff.utils import *
 import torch.nn.functional as F
-from scripts.metrics.fid import fid
-from scripts.metrics.kid import kid
+# from scripts.metrics.fid import fid
+# from scripts.metrics.kid import kid
 import copy
 import os
 from tiny_graph import test as test_tiny_graph
@@ -78,13 +81,8 @@ boundary_num = [] # max: 38 (76 dim)
 '''前置数据：rplang-v3-withsemantics'''
 '''输出数据：rplang-v3-withsemantics-withboundary和rplang-v3-withsemantics-withboundary-v2'''
 
-if not os.path.exists('./rplandata/Data/rplang-v3-withsemantics-withboundary'):
-    os.mkdir('./rplandata/Data/rplang-v3-withsemantics-withboundary')
-os.mkdir('./rplandata/Data/rplang-v3-withsemantics-withboundary/test')
-
-if not os.path.exists('./rplandata/Data/rplang-v3-withsemantics-withboundary-v2'):
-    os.mkdir('./rplandata/Data/rplang-v3-withsemantics-withboundary-v2')
-os.mkdir('./rplandata/Data/rplang-v3-withsemantics-withboundary-v2/test')
+os.makedirs('./rplandata/Data/rplang-v3-withsemantics-withboundary/test', exist_ok=True)
+os.makedirs('./rplandata/Data/rplang-v3-withsemantics-withboundary-v2/test', exist_ok=True)
 
 test_path = './rplandata/Data/rplang-v3-withsemantics/test'
 

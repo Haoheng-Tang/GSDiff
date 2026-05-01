@@ -1,12 +1,17 @@
 import sys
+from pathlib import Path
 
 import cv2
 from PIL import Image, ImageDraw
 
-sys.path.append('/home/user00/HSZ/gsdiff-main') # Modify it yourself
-sys.path.append('/home/user00/HSZ/gsdiff-main/datasets') # Modify it yourself
-sys.path.append('/home/user00/HSZ/gsdiff-main/gsdiff') # Modify it yourself
-sys.path.append('/home/user00/HSZ/gsdiff-main/scripts/metrics') # Modify it yourself
+SCRIPTS_DIR = Path(__file__).resolve().parent
+REPO_ROOT = SCRIPTS_DIR.parent
+DATASETS_DIR = REPO_ROOT / 'datasets'
+METRICS_DIR = SCRIPTS_DIR / 'metrics'
+
+sys.path.insert(0, str(REPO_ROOT))
+sys.path.insert(0, str(DATASETS_DIR))
+sys.path.insert(0, str(METRICS_DIR))
 
 
 import math
@@ -15,14 +20,14 @@ import shutil
 from torch.optim import AdamW, SGD
 from torch.utils.data import DataLoader
 from itertools import cycle
-from datasets.rplang_edge_semantics_simplified_55_106 import RPlanGEdgeSemanSimplified_55_106
-from datasets.rplang_edge_semantics_simplified import RPlanGEdgeSemanSimplified
+from rplang_edge_semantics_simplified_55_106 import RPlanGEdgeSemanSimplified_55_106
+from rplang_edge_semantics_simplified import RPlanGEdgeSemanSimplified
 from gsdiff.house_nn1 import HeterHouseModel
 from gsdiff.house_nn2 import EdgeModel
 from gsdiff.utils import *
 import torch.nn.functional as F
-from scripts.metrics.fid import fid
-from scripts.metrics.kid import kid
+from fid import fid
+from kid import kid
 
 
 diffusion_steps = 1000
@@ -36,7 +41,7 @@ resolution = 512
 
 '''create output_dir'''
 output_dir = 'test_outputs/A-1/' # Modify it yourself
-os.makedirs(output_dir, exist_ok=False)
+os.makedirs(output_dir, exist_ok=True)
 
 '''Diffusion Settings'''
 # cosine beta
@@ -68,7 +73,7 @@ posterior_mean_coef2 = (1.0 - alphas_cumprod_prev) * np.sqrt(alphas) / (
 
 '''Data'''
 dataset_test = RPlanGEdgeSemanSimplified_55_106('test')
-dataloader_test = DataLoader(dataset_test, batch_size=batch_size_test, shuffle=False, num_workers=8,
+dataloader_test = DataLoader(dataset_test, batch_size=batch_size_test, shuffle=False, num_workers=0,
                         drop_last=False, pin_memory=True)  # try different num_workers to be faster
 dataloader_test_iter = iter(cycle(dataloader_test))
 

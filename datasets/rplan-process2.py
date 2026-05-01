@@ -21,7 +21,12 @@ for fn, graph_ori in tqdm(b.items()):
     c[fn] = graph
 
 np.save('./rplandata/Data/structure_graphs1.npy', c)
-os.rename('./rplandata/Data/structure_graphs1.npy', './rplandata/Data/structure_graphs.npy')
+
+# Linux/MacOS
+# os.rename('./rplandata/Data/structure_graphs1.npy', './rplandata/Data/structure_graphs.npy')
+
+# Windows not support os.rename() to overwrite existing file, so we use os.replace() instead
+os.replace('./rplandata/Data/structure_graphs1.npy', './rplandata/Data/structure_graphs.npy')
 
 # print(len(b))
 # print(b[1])

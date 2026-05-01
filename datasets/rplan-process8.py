@@ -1,8 +1,13 @@
 import sys
-sys.path.append('/home/user00/HSZ/gsdiff-main')
-sys.path.append('/home/user00/HSZ/gsdiff-main/datasets')
-sys.path.append('/home/user00/HSZ/gsdiff-main/gsdiff')
-sys.path.append('/home/user00/HSZ/gsdiff-main/scripts/metrics')
+from pathlib import Path
+
+import numpy as np
+
+DATASETS_DIR = Path(__file__).resolve().parent
+REPO_ROOT = DATASETS_DIR.parent
+
+sys.path.insert(0, str(REPO_ROOT))
+sys.path.insert(0, str(DATASETS_DIR))
 
 
 import math
@@ -11,11 +16,12 @@ import shutil
 from torch.optim import AdamW, SGD
 from torch.utils.data import DataLoader
 from itertools import cycle
-from datasets.rplang_edge_semantics_simplified import RPlanGEdgeSemanSimplified
+# RPlanGEdgeSemanSimplified is not used in this preprocessing script.
+
 from gsdiff.utils import *
 import torch.nn.functional as F
-from scripts.metrics.fid import fid
-from scripts.metrics.kid import kid
+# from scripts.metrics.fid import fid
+# from scripts.metrics.kid import kid
 
 import os
 
@@ -55,9 +61,7 @@ def check_subdir_file_counts(base_dir):
         print('文件数' + str(len(file_list)))
 
 
-if not os.path.exists('rplandata/Data/rplang-v3-bubble-diagram'):
-    os.mkdir('./rplandata/Data/rplang-v3-bubble-diagram')
-os.mkdir('./rplandata/Data/rplang-v3-bubble-diagram/train')
+os.makedirs('./rplandata/Data/rplang-v3-bubble-diagram/train', exist_ok=True)
 
 
 bubblecategory = {}
