@@ -1,8 +1,11 @@
 import os
+from pathlib import Path
 from torch.utils.data import Dataset
 import torch
 import numpy as np
 from datasets import tiny_graph
+
+DATA_ROOT = Path(__file__).resolve().parent / 'rplang-v3-withsemantics'
 
 torch.set_printoptions(threshold=np.inf, linewidth=999999)
 np.set_printoptions(threshold=np.inf, linewidth=999999)
@@ -27,13 +30,14 @@ class RPlanGEdgeSemanSimplified_55_100(Dataset):
         self.mode = mode
         '''train(65763) & val(3000) & test(3000)'''
         if self.mode == 'train':
-            self.files = os.listdir('../datasets/rplang-v3-withsemantics/train')
+            self.data_dir = DATA_ROOT / 'train'
         elif self.mode == 'val':
-            self.files = os.listdir('../datasets/rplang-v3-withsemantics/val')
+            self.data_dir = DATA_ROOT / 'val'
         elif self.mode == 'test':
-            self.files = os.listdir('../datasets/rplang-v3-withsemantics/test')
+            self.data_dir = DATA_ROOT / 'test'
         else:
             assert 0, 'mode error'
+        self.files = os.listdir(self.data_dir)
         self.files = sorted(self.files, key=lambda x: int(x[:-4]), reverse=False)
 
     def __len__(self):
@@ -45,14 +49,7 @@ class RPlanGEdgeSemanSimplified_55_100(Dataset):
           (2)random augmentation.
           return all unbatched things in ndarray in a dict'''
 
-        if self.mode == 'train':
-            graph = np.load('../datasets/rplang-v3-withsemantics/train/' + self.files[index], allow_pickle=True).item()
-        elif self.mode == 'val':
-            graph = np.load('../datasets/rplang-v3-withsemantics/val/' + self.files[index], allow_pickle=True).item()
-        elif self.mode == 'test':
-            graph = np.load('../datasets/rplang-v3-withsemantics/test/' + self.files[index], allow_pickle=True).item()
-        else:
-            assert 0, 'mode error'
+        graph = np.load(self.data_dir / self.files[index], allow_pickle=True).item()
 
         '''coords_withsemantics, (53, 16)'''
         corners_withsemantics = graph['corner_list_np_normalized_padding_withsemantics']

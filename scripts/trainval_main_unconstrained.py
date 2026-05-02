@@ -1,8 +1,9 @@
 import sys
-sys.path.append('/home/user00/HSZ/gsdiff-main') # Modify it yourself
-sys.path.append('/home/user00/HSZ/gsdiff-main/datasets') # Modify it yourself
-sys.path.append('/home/user00/HSZ/gsdiff-main/gsdiff') # Modify it yourself
-sys.path.append('/home/user00/HSZ/gsdiff-main/scripts/metrics') # Modify it yourself
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
 
 import math
@@ -25,9 +26,19 @@ from scripts.metrics.kid import kid
 diffusion_steps = 1000
 lr = 1e-4
 weight_decay = 0
-total_steps = 1000000
-batch_size = 256 # 256
-batch_size_val = 3000 
+
+# total_steps = 1000000
+# HT
+total_steps = 100
+
+# batch_size = 256 # 256
+# HT
+batch_size = 4
+
+# batch_size_val = 3000
+# HT
+batch_size_val = 4
+
 device = 'cuda:0' # Modify it yourself
 merge_points = False
 clamp_trick_training = True
@@ -165,8 +176,11 @@ def map_to_sxtnary(tensor):
 
 
 '''create output_dir'''
-output_dir = 'outputs/structure-1/'
-os.makedirs(output_dir, exist_ok=False)
+# output_dir = 'outputs/structure-1/'
+# HT
+output_dir = 'outputs/structure-1-scratch-50/'
+
+os.makedirs(output_dir, exist_ok=True)
 '''record description'''
 description = ''' '''
 file_description = open(output_dir + 'file_description.txt', mode='w')
@@ -204,7 +218,7 @@ posterior_mean_coef2 = (1.0 - alphas_cumprod_prev) * np.sqrt(alphas) / (
 
 '''Data'''
 dataset_train = RPlanGEdgeSemanSimplified_55_100('train')
-dataloader_train = DataLoader(dataset_train, batch_size=batch_size, shuffle=True, num_workers=8,
+dataloader_train = DataLoader(dataset_train, batch_size=batch_size, shuffle=True, num_workers=0,
                         drop_last=True, pin_memory=True)  # try different num_workers to be faster
 dataloader_train_iter = iter(cycle(dataloader_train))
 dataset_val = RPlanGEdgeSemanSimplified_55_100('val')
@@ -302,7 +316,10 @@ step = 0
 loss_curve = []
 val_metrics = []
 
-interval = 250000 # real config
+# interval = 250000 # real config
+# HT
+interval = 100
+
 while step < total_steps:
     '''a batch of data'''
     corners_withsemantics_0, global_attn_matrix, corners_padding_mask = next(dataloader_train_iter)

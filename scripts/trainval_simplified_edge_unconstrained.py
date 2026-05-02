@@ -1,8 +1,9 @@
 import sys
+from pathlib import Path
 
-sys.path.append('/home/user00/HSZ/gsdiff-main')
-sys.path.append('/home/user00/HSZ/gsdiff-main/datasets')
-sys.path.append('/home/user00/HSZ/gsdiff-main/gsdiff')
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
 import math
 import torch
@@ -17,13 +18,24 @@ from itertools import cycle
 
 lr = 1e-4
 weight_decay = 1e-5
-total_steps = float("inf")  # 200000
-batch_size = 8  # 8
+
+# total_steps = float("inf")  # 200000
+# HT
+total_steps = 100
+
+# batch_size = 8  # 8
+# HT
+batch_size = 4
+
 device = 'cuda:0'
 
 '''create output_dir'''
-output_dir = 'outputs/structure-3/'
-os.makedirs(output_dir, exist_ok=False)
+
+# output_dir = 'outputs/structure-3/'
+# HT
+output_dir = 'outputs/structure-3-scratch-50/'
+
+os.makedirs(output_dir, exist_ok=True)
 
 '''Neural Network'''
 model = EdgeModel().to(device)
@@ -31,7 +43,7 @@ print('total params:', sum(p.numel() for p in model.parameters()))
 
 '''Data'''
 dataset_train = RPlanGEdgeSemanSimplified('train')
-dataloader_train = DataLoader(dataset_train, batch_size=batch_size, shuffle=True, num_workers=8,
+dataloader_train = DataLoader(dataset_train, batch_size=batch_size, shuffle=True, num_workers=0,
                               drop_last=True, pin_memory=True)  # try different num_workers to be faster
 dataloader_train_iter = iter(cycle(dataloader_train))
 dataset_val = RPlanGEdgeSemanSimplified('val')

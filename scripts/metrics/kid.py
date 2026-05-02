@@ -171,7 +171,7 @@ def kid(path1, path2, kid_batch_size, kid_device):
                                              batch_size=kid_batch_size,
                                              shuffle=False,
                                              drop_last=False,
-                                             num_workers=1)
+                                             num_workers=0)
     pred_arr1 = np.empty((len(files1), dims)) # np.ndarray([len(test set), 2048])
     start_idx1 = 0
     for batch1 in tqdm(dataloader1):
@@ -193,7 +193,7 @@ def kid(path1, path2, kid_batch_size, kid_device):
                                              batch_size=kid_batch_size,
                                              shuffle=False,
                                              drop_last=False,
-                                             num_workers=1)
+                                             num_workers=0)
     pred_arr2 = np.empty((len(files2), dims))
     start_idx2 = 0
     for batch2 in tqdm(dataloader2):

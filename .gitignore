@@ -1,4 +1,5 @@
-/datasets/
+/datasets/*
+!/datasets/__init__.py
 /outputs/
 /ckpts/
 /test_outputs/
