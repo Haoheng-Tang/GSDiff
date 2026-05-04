@@ -27,9 +27,9 @@ diffusion_steps = 1000
 lr = 1e-4
 weight_decay = 0
 
-# total_steps = 1000000
+total_steps = 1000000
 # HT
-total_steps = 100
+# total_steps = 100
 
 # batch_size = 256 # 256
 # HT
@@ -178,7 +178,8 @@ def map_to_sxtnary(tensor):
 '''create output_dir'''
 # output_dir = 'outputs/structure-1/'
 # HT
-output_dir = 'outputs/structure-1-scratch-50/'
+# output_dir = 'outputs/structure-1-scratch-50/'
+output_dir = 'outputs/structure-1-scratch-50000/'
 
 os.makedirs(output_dir, exist_ok=True)
 '''record description'''
@@ -318,7 +319,7 @@ val_metrics = []
 
 # interval = 250000 # real config
 # HT
-interval = 100
+interval = 500
 
 while step < total_steps:
     '''a batch of data'''

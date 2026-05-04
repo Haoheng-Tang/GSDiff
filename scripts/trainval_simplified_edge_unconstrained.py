@@ -21,7 +21,8 @@ weight_decay = 1e-5
 
 # total_steps = float("inf")  # 200000
 # HT
-total_steps = 100
+# total_steps = 100
+total_steps = 200000
 
 # batch_size = 8  # 8
 # HT
@@ -33,7 +34,7 @@ device = 'cuda:0'
 
 # output_dir = 'outputs/structure-3/'
 # HT
-output_dir = 'outputs/structure-3-scratch-50/'
+output_dir = 'outputs/structure-3-scratch-200000/'
 
 os.makedirs(output_dir, exist_ok=True)
 
@@ -66,7 +67,7 @@ stop_patience = 20
 stop_count = 0
 best_Acc = 0
 current_Acc = 0
-interval = 100
+interval = 500
 
 from scipy.stats import truncnorm
 

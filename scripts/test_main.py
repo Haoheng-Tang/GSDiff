@@ -23,7 +23,9 @@ from itertools import cycle
 from rplang_edge_semantics_simplified_55_106 import RPlanGEdgeSemanSimplified_55_106
 from rplang_edge_semantics_simplified import RPlanGEdgeSemanSimplified
 from gsdiff.house_nn1 import HeterHouseModel
-from gsdiff.house_nn2 import EdgeModel
+# from gsdiff.house_nn2 import EdgeModel
+# HT
+from gsdiff.house_nn3 import EdgeModel
 from gsdiff.utils import *
 import torch.nn.functional as F
 from fid import fid
@@ -31,7 +33,9 @@ from kid import kid
 
 
 diffusion_steps = 1000
-batch_size_test = 3000
+# batch_size_test = 3000
+# HT
+batch_size_test = 50
 device = 'cuda:0'
 merge_points = False # True?
 align_points = False # True?
@@ -159,7 +163,10 @@ for batch_count in tqdm(range(batch_numbers)):
 
 '''Neural Network
 Random Self-Supervised Strategy Transformer'''
-model_path_EdgeModel = 'outputs/structure-2/model_stage2_best_061000.pt'
+# model_path_EdgeModel = 'outputs/structure-2/model_stage2_best_061000.pt'
+# HT
+model_path_EdgeModel = 'outputs/structure-3-scratch-200000/model000500.pt'
+
 model_EdgeModel = EdgeModel().to(device)
 model_EdgeModel.load_state_dict(torch.load(model_path_EdgeModel, map_location=device))
 for param in model_EdgeModel.parameters():
@@ -168,9 +175,14 @@ for param in model_EdgeModel.parameters():
 # DDPM
 # Training with alignment loss
 test_metrics = []
-model_path_CDDPMs = ['outputs/structure-1/' + fn for fn in os.listdir('outputs/structure-1') if 'model' in fn and '.pt' in fn]
+# model_path_CDDPMs = ['outputs/structure-1/' + fn for fn in os.listdir('outputs/structure-1') if 'model' in fn and '.pt' in fn]
+# HT
+model_path_CDDPMs = ['outputs/structure-1-scratch-50000/model0000500.pt']
+# for model_path_CDDPM in model_path_CDDPMs:
+#     if int(model_path_CDDPM[5 + len('outputs/structure-1/'):8 + len('outputs/structure-1/')]) % 1000 == 100: # model1000000.pt
+# HT
 for model_path_CDDPM in model_path_CDDPMs:
-    if int(model_path_CDDPM[5 + len('outputs/structure-1/'):8 + len('outputs/structure-1/')]) % 1000 == 100: # model1000000.pt
+    if True:
         model_CDDPM = HeterHouseModel().to(device)
         model_CDDPM.load_state_dict(torch.load(model_path_CDDPM, map_location=device))
         for param in model_CDDPM.parameters():
@@ -336,7 +348,10 @@ for model_path_CDDPM in model_path_CDDPMs:
             corners_padding_mask_stage2_test[:, 0:corners_temp_stage2_test.shape[1], :] = 1
 
             '''model: Edge transformer'''
-            output_edges_test, _, _ = model_EdgeModel(corners_stage2_test, global_attn_matrix_stage2_test,
+            # output_edges_test, _, _ = model_EdgeModel(corners_stage2_test, global_attn_matrix_stage2_test,
+            #                                         corners_padding_mask_stage2_test, semantics_stage2_test)
+            # HT
+            output_edges_test = model_EdgeModel(corners_stage2_test, global_attn_matrix_stage2_test,
                                                 corners_padding_mask_stage2_test, semantics_stage2_test)
             output_edges_test = F.softmax(output_edges_test, dim=2)
             output_edges_test = torch.argmax(output_edges_test, dim=2)
