@@ -61,15 +61,16 @@ class TransformerLayer(nn.Module):
 
 
 class HeterHouseModel(nn.Module):
-    def __init__(self):
+    def __init__(self, num_room_types=7):
         super().__init__()
         self.d_model = 256
+        self.num_room_types = num_room_types
         self.time_embedding1 = nn.Sequential(
             nn.Linear(self.d_model, self.d_model),
             nn.SiLU(),
             nn.Linear(self.d_model, self.d_model),
         )
-        self.semantics_embedding = nn.Linear(8, self.d_model)
+        self.semantics_embedding = nn.Linear(num_room_types + 1, self.d_model)  # +1 for padding channel
 
         self.transformer_layers = nn.Sequential(
             TransformerLayer(self.d_model),
@@ -115,7 +116,7 @@ class HeterHouseModel(nn.Module):
             nn.ReLU(),
             nn.Linear(self.d_model, self.d_model),
             nn.ReLU(),
-            nn.Linear(self.d_model, 7+1)
+            nn.Linear(self.d_model, num_room_types + 1)  # +1 for padding channel
         )
 
     def forward(self, corners_withsemantics_t, global_attn_matrix, t):

@@ -92,9 +92,10 @@ class TransformerLayer(nn.Module):
 
 
 class EdgeModel(nn.Module):
-    def __init__(self):
+    def __init__(self, num_room_types=7):
         super().__init__()
         self.d_model = 256
+        self.num_room_types = num_room_types
 
         self.transformer_layers = nn.Sequential(
             TransformerLayer(self.d_model),
@@ -111,7 +112,7 @@ class EdgeModel(nn.Module):
             TransformerLayer(self.d_model),
         )
 
-        self.semantics_embedding = nn.Linear(7, self.d_model // 2) # 7 == semantics.shape[2]
+        self.semantics_embedding = nn.Linear(num_room_types, self.d_model // 2)
 
         self.edges_MLP = nn.Linear(self.d_model, 2)
 

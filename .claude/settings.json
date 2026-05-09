@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3)",
+      "Bash(conda run *)",
+      "Bash(grep -n \"point\\\\[14\\\\]\\\\\\\\|point\\\\[13\\\\]\\\\\\\\|point\\\\[12\\\\]\" \"d:\\\\OneDrive - Harvard University\\\\Career\\\\HDR\\\\PlanAuto\\\\GSDiff\\\\gsdiff\\\\utils.py\")",
+      "Bash(grep -n \"def.*results\\\\\\\\|def.*point\" \"d:\\\\OneDrive - Harvard University\\\\Career\\\\HDR\\\\PlanAuto\\\\GSDiff\\\\gsdiff\\\\utils.py\")",
+      "Bash(start \"d:\\\\OneDrive - Harvard University\\\\Career\\\\HDR\\\\PlanAuto\\\\GSDiff\\\\test_outputs\\\\msd_floorplan_plots\\\\overview_5plans.png\")"
+    ]
+  }
+}

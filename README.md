@@ -39,6 +39,59 @@ Official implementation of the AAAI 2025 paper: "GSDiff: Synthesizing Vector Flo
 Note, when we conducted our experiments, the semantics of bubble diagram GT involved randomness. Due to the terms of the RPLAN dataset, we are not permitted to release any part of it. Therefore, the bubble diagram GT semantics extracted using the provided scripts may differ slightly from our experimental results. However, given the large data scale, the bias should be minor (for rooms with ambiguous categories, both our GT and the GT you extract randomly select one category, which is no statistically significant difference).
 Alternatively, you can use `get_cycle_basis_and_semantic_3_semansimplified` instead of `get_cycle_basis_and_semantic_2_semansimplified` in `rplan-process8/9/10.py` to extract room semantics and train your own topology models. This method is not random, may yield improvements over the metrics reported in the paper.
 
+--------------------------MSD (Modified Swiss Dwellings)---------------------------------------
+
+The MSD dataset is an alternative to RPLAN. It contains Swiss residential floor plans with richer geometry (room polygons) and 9 room types.
+
+**Room type mapping** (verified by cross-referencing graph node centroids with the raw CSV):
+
+| Code | Room type  |
+|------|------------|
+| 0    | Bedroom    |
+| 1    | Livingroom |
+| 2    | Kitchen    |
+| 3    | Dining     |
+| 4    | Corridor   |
+| 5    | Stairs     |
+| 6    | Storeroom  |
+| 7    | Bathroom   |
+| 8    | Balcony    |
+
+**Setup:**
+1. Place the MSD data under `datasets/msddata/` with the following structure:
+   ```
+   datasets/msddata/
+   ├── mds_V2_5.372k.csv
+   └── modified-swiss-dwellings-v2/
+       ├── train/   (graph_in/, graph_out/, full_out/, struct_in/)
+       └── test/    (same subdirectories)
+   ```
+   Each pickle file is named by its `floor_id` from the CSV.
+
+2. Run the preprocessing script to produce GSDiff-compatible `.npy` files:
+   ```bash
+   python datasets/msd_process.py
+   ```
+   This creates `datasets/msd-v1-withsemantics/{train,val,test}/` with 3,818 train / 400 val / 727 test samples. Plans with more than 53 rooms are filtered out (~8% of the dataset).
+
+3. Extract topology statistics across the dataset:
+   ```bash
+   python datasets/msd_topology.py
+   ```
+   Prints per-split statistics: rooms/plan, edges/plan, average degree, connectivity percentage, and room-type and edge-type distributions.
+
+4. Visualize 5 randomly sampled floor plans as polygon floor plans and adjacency graphs:
+   ```bash
+   python scripts/plot_msd_floorplans.py
+   ```
+   Saves to `test_outputs/msd_floorplan_plots/`: one PNG per floor plan (polygon view + graph view) and a combined `overview_5plans.png`. Edit `RANDOM_SEED` and `N_PLANS` at the top of the script to change the sample.
+
+5. Train Stage 1 (node/room generation) on MSD:
+   ```bash
+   python scripts/trainval_main_msd_unconstrained.py
+   ```
+   Checkpoints and loss curves are saved under `outputs/msd-stage1-unconstrained/`. The model uses 9 room types (`HeterHouseModel(num_room_types=9)`); the default RPLAN model is unchanged.
+
 --------------------------LIFULL---------------------------------------
 
 If you want to try training/generating on the LIFULL dataset, please create path `datasets/lifulldata` and follow the data request process of Raster-to-Graph (https://github.com/SizheHu/Raster-to-Graph) to place the data under this path `datasets/lifulldata`. 
