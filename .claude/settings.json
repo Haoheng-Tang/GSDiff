@@ -5,7 +5,12 @@
       "Bash(conda run *)",
       "Bash(grep -n \"point\\\\[14\\\\]\\\\\\\\|point\\\\[13\\\\]\\\\\\\\|point\\\\[12\\\\]\" \"d:\\\\OneDrive - Harvard University\\\\Career\\\\HDR\\\\PlanAuto\\\\GSDiff\\\\gsdiff\\\\utils.py\")",
       "Bash(grep -n \"def.*results\\\\\\\\|def.*point\" \"d:\\\\OneDrive - Harvard University\\\\Career\\\\HDR\\\\PlanAuto\\\\GSDiff\\\\gsdiff\\\\utils.py\")",
-      "Bash(start \"d:\\\\OneDrive - Harvard University\\\\Career\\\\HDR\\\\PlanAuto\\\\GSDiff\\\\test_outputs\\\\msd_floorplan_plots\\\\overview_5plans.png\")"
+      "Bash(start \"d:\\\\OneDrive - Harvard University\\\\Career\\\\HDR\\\\PlanAuto\\\\GSDiff\\\\test_outputs\\\\msd_floorplan_plots\\\\overview_5plans.png\")",
+      "Bash(python -c \"import numpy as np; d=np.load\\('datasets/msd-v1-withsemantics/test/'+__import__\\('os'\\).listdir\\('datasets/msd-v1-withsemantics/test'\\)[0], allow_pickle=True\\).item\\(\\); print\\(list\\(d.keys\\(\\)\\)\\); [print\\(k, d[k].shape, d[k].dtype\\) for k in d]\")",
+      "Read(//f/miniforge3/envs/musa-550-fall-2024/**)",
+      "Read(//f/micromamba/envs/musa-550-fall-2024/**)",
+      "Bash(\"F:/miniforge3/envs/musa-550-fall-2024/python.exe\" datasets/msd_wallgraph_toy_process.py)",
+      "Bash(F:/miniforge3/envs/musa-550-fall-2024/python.exe -c ' *)"
     ]
   }
 }

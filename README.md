@@ -92,6 +92,23 @@ The MSD dataset is an alternative to RPLAN. It contains Swiss residential floor 
    ```
    Checkpoints and loss curves are saved under `outputs/msd-stage1-unconstrained/`. The model uses 9 room types (`HeterHouseModel(num_room_types=9)`); the default RPLAN model is unchanged.
 
+6. **Toy MSD run (1000 train / 100 test)** — useful for smoke-testing the pipeline on a small dataset before a full run:
+
+   a. Build the toy folder from the already-processed MSD data. This copies the first 1000 `.npy` files (sorted by numeric ID) from `msd-v1-withsemantics/train/` and the first 100 from `msd-v1-withsemantics/test/` into `datasets/msd-v1-toy/{train,test}/`:
+      ```powershell
+      $src = 'datasets\msd-v1-withsemantics'; $dst = 'datasets\msd-v1-toy'
+      New-Item -ItemType Directory -Force -Path "$dst\train", "$dst\test" | Out-Null
+      Get-ChildItem "$src\train" -Filter *.npy | Sort-Object { [int]($_.BaseName) } | Select-Object -First 1000 | ForEach-Object { Copy-Item $_.FullName "$dst\train\" }
+      Get-ChildItem "$src\test"  -Filter *.npy | Sort-Object { [int]($_.BaseName) } | Select-Object -First 100  | ForEach-Object { Copy-Item $_.FullName "$dst\test\"  }
+      ```
+      The `MSDRoomSemantics` dataset class accepts a `data_root='msd-v1-toy'` argument to point at this folder.
+
+   b. Train Stage 1 on the toy set:
+      ```bash
+      python scripts/trainval_main_msd_toy.py
+      ```
+      Identical model and pipeline to step 5, but with `total_steps=5000` and the val/FID loop pointed at the toy `test/` split (since the toy folder has no val split). Outputs go to `outputs/msd-stage1-toy/`. Edit `total_steps`, `interval`, `batch_size`, or `device` at the top of the script.
+
 --------------------------LIFULL---------------------------------------
 
 If you want to try training/generating on the LIFULL dataset, please create path `datasets/lifulldata` and follow the data request process of Raster-to-Graph (https://github.com/SizheHu/Raster-to-Graph) to place the data under this path `datasets/lifulldata`. 
