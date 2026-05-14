@@ -125,6 +125,16 @@ Download the corresponding weights and run them via:
 
 No constraints: We use the original 3000 results and run them 5 times to get the average.
 
+To train an unconstrained model on RPLAN, run:
+
+```
+python scripts/trainval_simplified_edge_unconstrained.py
+```
+```
+python scripts/trainval_main_unconstrained.py
+```
+
+
 Topology constraints: We took the intersection of the original 3000 results with the test set numbers of HouseDiffusion and House-GAN++, and got 757. 
 We ran them 5 times and averaged them to get the FID, KID, GED, and statistical analysis of each room type. 
 The sample numbers of 757 are in line 183 of `evalmetric-topoconstrain-ged-roomnumber.py`.
